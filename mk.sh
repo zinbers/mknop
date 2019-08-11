@@ -70,7 +70,7 @@ echo -e "$green \n生成空镜像(.img)... $white"
 fallocate -l $(($rootfssize+64))M "$(date +%Y-%m-%d)-openwrt-n1-auto-generate.img"
 
 echo -e "$green \n分区... $white"
-echo -e "n\n\n\n\n+128M\nn\n\n\n\n\nw" | fdisk *.img > /dev/null 2>&1
+echo -e "n\n\n\n\n+64M\nn\n\n\n\n\nw" | fdisk *.img > /dev/null 2>&1
 echo -e "t\n1\ne\nw" | fdisk *.img > /dev/null 2>&1
 
 echo -e "$green \n格式化... $white"
