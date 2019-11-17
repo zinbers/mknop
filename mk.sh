@@ -22,6 +22,7 @@ else
     echo -e "$red \n 请选择正确的设备, 1. 斐讯N1 / 2. 贝壳云 ! $white" && exit
 fi
 
+# 清理重构目录
 if [ -d $out_dir ]; then
     sudo rm -rf $out_dir
 fi
@@ -130,4 +131,3 @@ if [ $device = "beikeyun" ]; then
 fi
 
 echo -e "$green \n 制作成功, 输出文件夹 --> $out_dir $white"
-
