@@ -1,25 +1,17 @@
 name: CI
-
 on: [push]
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
       run: echo Hello, world!
     - name: Run a multi-line script
       run: |
-      
         sudo bash mk.sh
-     
-
       - name: Upload artifact
         uses: actions/upload-artifact@master
         with:
           name: OpenWrtn1
           path: ./out/
-        
