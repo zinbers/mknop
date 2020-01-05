@@ -16,7 +16,7 @@ jobs:
           sudo -E apt-get clean
           cd /.
 sudo rm -rf $out
-mkdir -p $out/openwrt
+sudo mkdir -p $out/openwrt
 sudo mkdir -p $”./media/rootfs”ir
 # 解压openwrt固件
 cd $openwrt
