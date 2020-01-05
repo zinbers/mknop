@@ -8,19 +8,10 @@ out_dir=out
 openwrt_dir=openwrt
 boot_dir="/media/boot"
 rootfs_dir="/media/rootfs"
-device=""
+device="n1"
 loop=
 
-echo && read -p "请选择设备(1. 斐讯N1 / 2. 贝壳云)，默认 斐讯N1: " choose
-[ $choose ] || choose=1
 
-if [ $choose -eq 1 ]; then
-    device="n1"
-elif [ $choose -eq 2 ]; then
-    device="beikeyun"
-else
-    echo -e "$red \n 请选择正确的设备, 1. 斐讯N1 / 2. 贝壳云 ! $white" && exit
-fi
 
 # 清理重构目录
 if [ -d $out_dir ]; then
@@ -67,8 +58,8 @@ sudo cp -r ../armbian/$device/rootfs/* openwrt/ && sync
 sudo chown -R root:root openwrt/
 
 # 制作可启动镜像
-echo && read -p "请输入ROOTFS分区大小(单位MB)，默认512M: " rootfssize
-[ $rootfssize ] || rootfssize=512
+
+rootfssize=512
 
 openwrtsize=$(sudo du -hs openwrt | cut -d "M" -f 1)
 [ $rootfssize -lt $openwrtsize ] &&
