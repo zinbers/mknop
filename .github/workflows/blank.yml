@@ -14,72 +14,62 @@ jobs:
           sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
-          cd /.
-sudo rm -rf $out
-sudo mkdir -p ./out/openwrt
-sudo mkdir -p $”./media/rootfs”ir
+          sudo rm -rf ./out
+          sudo mkdir -p ./out/openwrt
+          sudo mkdir -p /media/rootfs
 # 解压openwrt固件
-cd $openwrt
-sudo tar -xzf *rootfs.tar.gz -C ../$out/openwrt
+          cd ./out/openwrt
+          sudo tar -xzf *rootfs.tar.gz -C ../out/openwrt
 # 拷贝openwrt rootfs
-echo -e "$green \n 提取OpenWrt ROOTFS... $white"
-cd ../$out
-    sudo cp -r $”./media/rootfs”ir/* openwrt/ && sync
-    sudo umount $”./media/rootfs”ir
-    [ $loop ] && sudo losetup -d $loop
+          echo -e "提取OpenWrt ROOTFS..."
+          cd ../out
+          sudo cp -r /media/rootfs/* openwrt/ && sync
+          sudo umount /media/rootfs
+          [ $loop ] && sudo losetup -d $loop
 
-sudo cp -r ../armbian/$”n1”/rootfs/* openwrt/ && sync
-sudo chown -R root:root openwrt/
+          sudo cp -r ../armbian/n1/rootfs/* openwrt/ && sync
+          sudo chown -R root:root openwrt/
 
 # 制作可启动镜像
 
 
-echo -e "$green \n 生成空镜像(.img)... $white"
-fallocate -l $(($512 + 145))M "$(date +%Y-%m-%d)-openwrt-${“n1”}-auto-generate.img"
+          echo -e "生成空镜像(.img)..."
+          fallocate -l 657M "$(date +%Y-%m-%d)-openwrt-n1-auto-generate.img"
 
-echo -e "$green \n 分区... $white"
-parted -s *.img mklabel msdos
-parted -s *.img mkpart primary ext4 17M 151M
-parted -s *.img mkpart primary ext4 152M 100%
+          echo -e "分区..."
+          parted -s *.img mklabel msdos
+          parted -s *.img mkpart primary ext4 17M 151M
+          parted -s *.img mkpart primary ext4 152M 100%
 
 # 格式化镜像
-echo -e "$green \n 格式化... $white"
-loop=$(sudo losetup -P -f --show *.img)
-[ ! $loop ] &&
-    echo -e "$red \n 格式化失败! $white" &&
-    exit
-
-    sudo mkfs.vfat -n "BOOT" ${loop}p1 > /dev/null 2>&1
+          echo -e "格式化..."
+          loop=$(sudo losetup -P -f --show *.img)
+          [ ! $loop ] && echo -e "格式化失败!" && exit
+          sudo mkfs.vfat -n "BOOT" ${loop}p1 > /dev/null 2>&1
 
 # 挂载分区
-sudo mkdir -p $”./media/boot”
-sudo mount -o rw ${loop}p1 $”./media/boot”
-sudo mount -o rw ${loop}p2 $”./media/rootfs”ir
-
+          sudo mkdir -p /media/boot
+          sudo mount -o rw ${loop}p1 /media/boot
+          sudo mount -o rw ${loop}p2 /media/rootfs
 # 拷贝文件到启动镜像
-cd ../
-echo -e "$green \n 拷贝文件到启动镜像... $white"
-sudo cp -r armbian/$”n1”/boot/* $”./media/boot”
-sudo mv $out/openwrt/* $”./media/rootfs”ir
-sync
+          cd ../
+          echo -e "拷贝文件到启动镜像... "
+          sudo cp -r ./armbian/n1/boot/* /media/boot
+          sudo mv ./out/openwrt/* /media/rootfs
+          sync
 
 # 取消分区挂载
 
-    sudo umount $”./media/boot”
+          sudo umount /media/boot
+          sudo umount /media/rootfs
 
-
-    sudo umount $”./media/rootfs”ir
-
-[ $loop ] && sudo losetup -d $loop
+          [ $loop ] && sudo losetup -d $loop
 
 # 清理残余
-sudo rm -rf $”./media/boot”
-sudo rm -rf $”./media/rootfs”ir
-sudo rm -rf $out/openwrt
-
-
-
-echo -e "$green \n 制作成功, 输出文件夹 --> $out $white"
+          sudo rm -rf /media/boot
+          sudo rm -rf /media/rootfs
+          sudo rm -rf ./out/openwrt
+          echo -e "制作成功, 输出文件夹 --> ./out"
 
       - name: Upload artifact
         uses: actions/upload-artifact@master
