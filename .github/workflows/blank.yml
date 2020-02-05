@@ -51,8 +51,8 @@ jobs:
           sudo rm -rf /media/rootfs
           sudo rm -rf ./out/openwrt
           echo -e "制作成功, 输出文件夹 --> ./out"
-      - name: Upload artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: OpenWrtn1
-          path: ./out/
+    - name: Upload artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: OpenWrtn1
+        path: ./out/
