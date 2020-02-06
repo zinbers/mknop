@@ -37,6 +37,7 @@ jobs:
           loop=$(sudo losetup -P -f --show *.img)
           [ ! $loop ] && echo -e "格式化失败!" && exit
           sudo mkfs.vfat -n "BOOT" ${loop}p1 > /dev/null 2>&1
+          sudo mke2fs -F -q -t ext4 -L "ROOTFS" -m 0 ${loop}p2 > /dev/null 2>&1
           sudo mkdir -p /media/boot
           sudo mount -o rw ${loop}p1 /media/boot
           sudo mount -o rw ${loop}p2 /media/rootfs
