@@ -28,7 +28,7 @@ jobs:
           sudo cp -r ../armbian/n1/rootfs/* openwrt/ && sync
           sudo chown -R root:root openwrt/
           echo -e "生成空镜像(.img)..."
-          fallocate -l 657M "$(date +%Y-%m-%d)-openwrt-n1-auto-generate.img"
+          sudo fallocate -l 657M "$(date +%Y-%m-%d)-openwrt-n1-auto-generate.img"
           echo -e "分区..."
           parted -s *.img mklabel msdos
           parted -s *.img mkpart primary ext4 17M 151M
